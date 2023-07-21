@@ -6,7 +6,7 @@ import random
 from PIL import ImageTk, Image
 import cv2
 
-with open('C:/Users/modib/Documents/kali/py/MindGames/data.json') as f:
+with open('C:/Users/Samy Lamlih/Documents/code/py/MindGames/data.json') as f:
    data = json.load(f)
 
 level = data['LEVEL']
