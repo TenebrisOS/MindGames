@@ -37,11 +37,11 @@ def AddToList(buttonNumb, chimpcanvas):
         create_buttons()
         return
     elif len(clickedList) == 1:
-        # for i in range(len(buttn_list)):
-        #     try:
-        #         buttn_list[i].configure(text_color='black')
-        #     except Exception as e:
-        #         pass
+        for i in range(len(buttn_list)):
+            try:
+                buttn_list[i].configure(text_color='black')
+            except Exception as e:
+                pass
         if clickedList[0] != 1:
             FailedCanvas(chimpCanvas=chimpcanvas)
             return
@@ -106,7 +106,7 @@ def create_buttons():
         numb1 = numb + 1
         buttn_list.append(None)
         buttn_list[numb] = ctk.CTkButton(chimpCanvas, text=str(
-            numb1), width=50, height=50, text_color='white', bg_color='white', hover_color='black', fg_color='black', font=("arial", 20), command=lambda num=numb1: AddToList(buttonNumb=num, chimpcanvas=chimpCanvas))
+            numb1), width=50, height=50, text_color='white', bg_color='white', hover_color='black', fg_color='black', font=("arial", 22), command=lambda num=numb1: AddToList(buttonNumb=num, chimpcanvas=chimpCanvas))
         x_coord, y_coord = generate_random_position(buttn_list[numb])
         buttn_list[numb].place(x=x_coord, y=y_coord)
         button_positions.append(
@@ -122,41 +122,41 @@ def EnterChimpTest():
 # endregion
 
 
-def EnterAimTrainer():
-    create_buttons()
-
-    for i in buttn_list:
-        pass
-        #print('Test: ' + i.__repr__())
-
-
-def EnterReactionTest():
-    canvasMenu.destroy()
-    reactionCanvas = ctk.CTkCanvas(root, width=640, height=360)
-    reactionCanvas.pack()
-
-    def calculateReactionTime(start_time):
-        reactionCanvas.destroy()
-        reactionCanvas = ctk.CTkCanvas(root, width=640, height=360)
-        reactionCanvas.pack()
-        end_time = time.time()
-        elapsed_time = end_time - start_time
-        label = ctk.CTkLabel(reactionCanvas, text=("Reaction Time : " + str(elapsed_time)),
-                             text_color="black", font=('arial', 20))
-        label.pack()
-        return elapsed_time
-
-    def f():
-        start_time = time.time()
-        mainbutton = ctk.CTkButton(reactionCanvas, text="CLICK !!", width=640,
-                                   height=360, command=lambda: calculateReactionTime(start_time=start_time))
-        mainbutton.pack()
-
-    label = ctk.CTkLabel(reactionCanvas, text=("Wait for the button to appear"),
-                         text_color="black", font=('arial', 40))
-    label.pack()
-    random_integer = random.randint(5, 10)
-    root.after(2000, f)
+#def EnterAimTrainer():
+#    create_buttons()
+#
+#    for i in buttn_list:
+#        pass
+#        #print('Test: ' + i.__repr__())
+#
+#
+#def EnterReactionTest():
+#    canvasMenu.destroy()
+#    reactionCanvas = ctk.CTkCanvas(root, width=640, height=360)
+#    reactionCanvas.pack()
+#
+#    def calculateReactionTime(start_time):
+#        reactionCanvas.destroy()
+#        reactionCanvas = ctk.CTkCanvas(root, width=640, height=360)
+#        reactionCanvas.pack()
+#        end_time = time.time()
+#        elapsed_time = end_time - start_time
+#        label = ctk.CTkLabel(reactionCanvas, text=("Reaction Time : " + str(elapsed_time)),
+#                             text_color="black", font=('arial', 20))
+#        label.pack()
+#        return elapsed_time
+#
+#    def f():
+#        start_time = time.time()
+#        mainbutton = ctk.CTkButton(reactionCanvas, text="CLICK !!", width=640,
+#                                   height=360, command=lambda: calculateReactionTime(start_time=start_time))
+#        mainbutton.pack()
+#
+#    label = ctk.CTkLabel(reactionCanvas, text=("Wait for the button to appear"),
+#                         text_color="black", font=('arial', 40))
+#    label.pack()
+#    random_integer = random.randint(5, 10)
+#    root.after(2000, f)
 
 
 def FailedCanvas(chimpCanvas):
@@ -166,7 +166,7 @@ def FailedCanvas(chimpCanvas):
     failcanvas.pack()
     mainMenu.append(failcanvas)
     pwlabel = ctk.CTkLabel(failcanvas, text="You failed :(",
-                           fg_color="transparent", font=('arial', 40), text_color='black', bg_color='white')
+                           fg_color="transparent", font=('arial', 50), text_color='black', bg_color='white')
     pwlabel.place(x=250 ,y=150)
     playAgain = ctk.CTkButton(failcanvas, text="Play Again ?",
                           width=50, height=50, command=create_buttons)
@@ -188,6 +188,19 @@ root.iconbitmap("icon.ico")
 
 mainMenu = []
 
+def ChimpMenu():
+    chimpmainmenu = ctk.CTkCanvas(root, width=640, height=360)
+    chimpmainmenu.pack()
+    title = ctk.CTkLabel(chimpmainmenu, text="Are You Smarter Than a Chimpanzee?",
+                           fg_color="transparent", font=('arial', 50), text_color='black', bg_color='white')
+    title.place(x=250 ,y=150)
+    text = ctk.CTkLabel(chimpmainmenu, text="Click the squares in order according to their numbers.",
+                           fg_color="transparent", font=('arial', 20), text_color='black', bg_color='white')
+    text.place(x=250 ,y=150)
+    text2 = ctk.CTkLabel(chimpmainmenu, text="The test will get progressively harder.",
+                           fg_color="transparent", font=('arial', 20), text_color='black', bg_color='white')
+    text2.place(x=250 ,y=150)
+
 def menu():
     canvasMenu = ctk.CTkCanvas(root, width=640, height=360)
     canvasMenu.pack()
@@ -197,14 +210,14 @@ def menu():
                               width=80, height=80, command=EnterChimpTest)
     ChimpTest.place(x=100, y=100)
     ChimpTest.lift()
-    ReactionTime = ctk.CTkButton(
-        canvasMenu, text="ReactionTime", width=80, height=80, command=EnterReactionTest)
-    ReactionTime.place(x=300, y=100)
-    ReactionTime.lift()
-    AimTrainer = ctk.CTkButton(
-        canvasMenu, text="AimTrainer", width=80, height=80, command=EnterReactionTest)
-    AimTrainer.place(x=500, y=100)
-    AimTrainer.lift()
+    #ReactionTime = ctk.CTkButton(
+    #    canvasMenu, text="ReactionTime", width=80, height=80, command=EnterReactionTest)
+    #ReactionTime.place(x=300, y=100)
+    #ReactionTime.lift()
+    #AimTrainer = ctk.CTkButton(
+    #    canvasMenu, text="AimTrainer", width=80, height=80, command=EnterReactionTest)
+    #AimTrainer.place(x=500, y=100)
+    #AimTrainer.lift()
 
 # buttons = {}
 button_positions = []
