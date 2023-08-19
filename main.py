@@ -14,8 +14,6 @@ with open('allData/json/data.json') as f:
 # region vars
 mistakes = 0
 buttn_list = []
-png1 = ''
-png2 = ''
 mainMenu = []
 gameplayMenus = []
 level = data['CHIMP_TEST_LEVEL']
@@ -108,7 +106,9 @@ def create_buttons():
     for i in range(len(mainMenu)):
         if mainMenu[i] is not None:
             mainMenu[i].destroy()
-
+    for i in range(len(gameplayMenus)):
+        if gameplayMenus[i] is not None:
+            gameplayMenus[i].destroy()
     chimpCanvas = ctk.CTkCanvas(root, width=640, height=360)
     chimpCanvas.pack()
     gameplayMenus.append(chimpCanvas)
@@ -183,7 +183,7 @@ def FailedCanvas(chimpCanvas):
     pwlabel.place(x=190, y=100)
     Level = ctk.CTkLabel(failcanvas, text=('Level : %d' % level),
                          fg_color="transparent", font=('arial', 20), text_color='black', bg_color='white')
-    Level.place(x=190, y=300)
+    Level.place(x=280, y=300)
     playAgain = ctk.CTkButton(failcanvas, text="Play Again ?",
                               width=100, height=50, command=create_buttons)
     playAgain.place(x=200, y=200)
@@ -258,7 +258,7 @@ root.geometry("640x360")
 root.minsize(640, 360)
 root.maxsize(640, 360)
 root.title("Mind Games")
-root.iconbitmap("icon.ico")
+root.iconbitmap("allData/assets/PNG/icon.ico")
 # endregion
 
 # region starting functions
