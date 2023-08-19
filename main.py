@@ -1,22 +1,34 @@
+# region imports
 import customtkinter as ctk
 import json
 import random
+from PIL import Image, ImageFont, ImageDraw
+from tkinter import font
 import time
+# endregion
 
 # region Chimp
-with open('data.json') as f:
+with open('allData/json/data.json') as f:
     data = json.load(f)
 
+# region vars
 mistakes = 0
-
 buttn_list = []
-
+png1 = ''
+png2 = ''
+mainMenu = []
+gameplayMenus = []
 level = data['CHIMP_TEST_LEVEL']
 clickedList = []
+button_positions = []
+dataPath = 'allData/json/data.json'
+# endregion
 
-data["CHIMP_TEST_LEVEL"] = 1
-with open("data.json", "w") as jsonFile:
-    json.dump(data, jsonFile)
+
+def resetLevel():
+    data["CHIMP_TEST_LEVEL"] = 1
+    with open(dataPath, "w") as jsonFile:
+        json.dump(data, jsonFile)
 
 
 def AddToList(buttonNumb, chimpcanvas):
@@ -31,7 +43,7 @@ def AddToList(buttonNumb, chimpcanvas):
         print(clickedList)
         level = data['CHIMP_TEST_LEVEL']
         data["CHIMP_TEST_LEVEL"] = level + 1
-        with open("data.json", "w") as jsonFile:
+        with open(dataPath, "w") as jsonFile:
             json.dump(data, jsonFile)
         chimpcanvas.destroy()
         create_buttons()
@@ -94,13 +106,12 @@ def intersect(bbox1, bbox2):
 def create_buttons():
     level = data['CHIMP_TEST_LEVEL']
     for i in range(len(mainMenu)):
-        if mainMenu[i] is None:
-            pass
-        else:
+        if mainMenu[i] is not None:
             mainMenu[i].destroy()
-    
+
     chimpCanvas = ctk.CTkCanvas(root, width=640, height=360)
     chimpCanvas.pack()
+    gameplayMenus.append(chimpCanvas)
 
     for numb in range(level + 3):
         numb1 = numb + 1
@@ -118,11 +129,11 @@ def EnterChimpTest():
 
     for i in buttn_list:
         pass
-        #print('Test: ' + i.__repr__())
+        # print('Test: ' + i.__repr__())
 # endregion
 
 
-#def EnterAimTrainer():
+# def EnterAimTrainer():
 #    create_buttons()
 #
 #    for i in buttn_list:
@@ -130,7 +141,7 @@ def EnterChimpTest():
 #        #print('Test: ' + i.__repr__())
 #
 #
-#def EnterReactionTest():
+# def EnterReactionTest():
 #    canvasMenu.destroy()
 #    reactionCanvas = ctk.CTkCanvas(root, width=640, height=360)
 #    reactionCanvas.pack()
@@ -160,6 +171,8 @@ def EnterChimpTest():
 
 
 def FailedCanvas(chimpCanvas):
+    level = data['CHIMP_TEST_LEVEL']
+    resetLevel()
     clickedList.clear()
     chimpCanvas.destroy()
     failcanvas = ctk.CTkCanvas(root, width=640, height=360)
@@ -167,60 +180,63 @@ def FailedCanvas(chimpCanvas):
     mainMenu.append(failcanvas)
     pwlabel = ctk.CTkLabel(failcanvas, text="You failed :(",
                            fg_color="transparent", font=('arial', 50), text_color='black', bg_color='white')
-    pwlabel.place(x=250 ,y=150)
+    pwlabel.place(x=190, y=100)
+    Level = ctk.CTkLabel(failcanvas, text=('Level : %d' % level),
+                         fg_color="transparent", font=('arial', 20), text_color='black', bg_color='white')
+    Level.place(x=190, y=300)
     playAgain = ctk.CTkButton(failcanvas, text="Play Again ?",
-                          width=50, height=50, command=create_buttons)
-    playAgain.place(x=200, y=300)
+                              width=100, height=50, command=create_buttons)
+    playAgain.place(x=200, y=200)
     backToMenu = ctk.CTkButton(failcanvas, text="Back To Menu",
-                              width=50, height=50, command=menu)
-    backToMenu.place(x=400, y=300)
+                               width=100, height=50, command=menu)
+    backToMenu.place(x=350, y=200)
 
-
-# region BG
-ctk.set_appearance_mode('dark')
-ctk.set_default_color_theme("dark-blue")
-root = ctk.CTk()
-root.geometry("640x360")
-root.minsize(640, 360)
-root.maxsize(640, 360)
-root.title("MindGames")
-root.iconbitmap("icon.ico")
-
-mainMenu = []
 
 def ChimpMenu():
+    for i in range(len(mainMenu)):
+        if mainMenu[i] is not None:
+            mainMenu[i].destroy()
     chimpmainmenu = ctk.CTkCanvas(root, width=640, height=360)
     chimpmainmenu.pack()
+    mainMenu.append(chimpmainmenu)
     title = ctk.CTkLabel(chimpmainmenu, text="Are You Smarter Than a Chimpanzee?",
-                           fg_color="transparent", font=('arial', 50), text_color='black', bg_color='white')
-    title.place(x=250 ,y=150)
+                         fg_color="transparent", font=('arial', 30), text_color='black', bg_color='white', anchor=ctk.CENTER)
+    title.place(x=70, y=50)
     text = ctk.CTkLabel(chimpmainmenu, text="Click the squares in order according to their numbers.",
-                           fg_color="transparent", font=('arial', 20), text_color='black', bg_color='white')
-    text.place(x=250 ,y=150)
+                        fg_color="transparent", font=('arial', 20), text_color='black', bg_color='white')
+    text.place(x=90, y=100)
     text2 = ctk.CTkLabel(chimpmainmenu, text="The test will get progressively harder.",
-                           fg_color="transparent", font=('arial', 20), text_color='black', bg_color='white')
-    text2.place(x=250 ,y=150)
+                         fg_color="transparent", font=('arial', 20), text_color='black', bg_color='white')
+    text2.place(x=145, y=125)
+    ChimpTest = ctk.CTkButton(chimpmainmenu, text="Start Test",
+                              width=80, height=40, command=EnterChimpTest)
+    ChimpTest.place(x=280, y=200)
+
 
 def menu():
+    resetLevel()
+    for i in range(len(mainMenu)):
+        if mainMenu[i] is not None:
+            mainMenu[i].destroy()
     canvasMenu = ctk.CTkCanvas(root, width=640, height=360)
     canvasMenu.pack()
     mainMenu.append(canvasMenu)
     # cap = cv2.VideoCapture('bg.mp4')
     ChimpTest = ctk.CTkButton(canvasMenu, text="ChimpTest",
-                              width=80, height=80, command=EnterChimpTest)
+                              width=100, height=40, command=ChimpMenu)
     ChimpTest.place(x=100, y=100)
     ChimpTest.lift()
-    #ReactionTime = ctk.CTkButton(
+    # ReactionTime = ctk.CTkButton(
     #    canvasMenu, text="ReactionTime", width=80, height=80, command=EnterReactionTest)
-    #ReactionTime.place(x=300, y=100)
-    #ReactionTime.lift()
-    #AimTrainer = ctk.CTkButton(
+    # ReactionTime.place(x=300, y=100)
+    # ReactionTime.lift()
+    # AimTrainer = ctk.CTkButton(
     #    canvasMenu, text="AimTrainer", width=80, height=80, command=EnterReactionTest)
-    #AimTrainer.place(x=500, y=100)
-    #AimTrainer.lift()
+    # AimTrainer.place(x=500, y=100)
+    # AimTrainer.lift()
 
 # buttons = {}
-button_positions = []
+
 # while cap.isOpened():
 #    # read next frame
 #    ret, frame = cap.read()
@@ -232,7 +248,22 @@ button_positions = []
 #    photo = ImageTk.PhotoImage(image)
 #    canvas.create_image(0, 0, image=photo, anchor="nw")
 #    root.update()
+
+
+# region tkinter settings
+ctk.set_appearance_mode('dark')
+ctk.set_default_color_theme("dark-blue")
+root = ctk.CTk()
+root.geometry("640x360")
+root.minsize(640, 360)
+root.maxsize(640, 360)
+root.title("Mind Games")
+root.iconbitmap("icon.ico")
 # endregion
+
+# region starting functions
+resetLevel()
 menu()
+# endregion
 
 root.mainloop()
