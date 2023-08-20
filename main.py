@@ -2,9 +2,7 @@
 import customtkinter as ctk
 import json
 import random
-from PIL import Image, ImageFont, ImageDraw
-from tkinter import font
-import time
+from playsound import playsound
 # endregion
 
 # region Chimp
@@ -30,12 +28,17 @@ def resetLevel():
 
 
 def AddToList(buttonNumb, chimpcanvas):
+
+    global mistakes
     level = data['CHIMP_TEST_LEVEL']
     buttn_list[buttonNumb-1].destroy()
 
     clickedList.append(buttonNumb)
 
     if len(clickedList) == level + 3:
+        for i in range(len(gameplayMenus)):
+            if gameplayMenus[i] is not None:
+                gameplayMenus[i].destroy()
         clickedList.clear()
         # clickedList.append(buttonNumb)
         print(clickedList)
@@ -43,20 +46,25 @@ def AddToList(buttonNumb, chimpcanvas):
         data["CHIMP_TEST_LEVEL"] = level + 1
         with open(dataPath, "w") as jsonFile:
             json.dump(data, jsonFile)
+
         chimpcanvas.destroy()
+
         create_buttons()
+        print('chimpcanvas')
         return
     elif len(clickedList) == 1:
-        for i in range(len(buttn_list)):
-            try:
-                buttn_list[i].configure(text_color='black')
-            except Exception as e:
-                pass
+        # for i in range(len(buttn_list)):
+        #    try:
+        #        buttn_list[i].configure(text_color='black')
+        #    except Exception as e:
+        #        pass
         if clickedList[0] != 1:
-            FailedCanvas(chimpCanvas=chimpcanvas)
+            mistakes = mistakes + 1
+            failedChimp(chimpCanvas=chimpcanvas)
             return
     elif not check_order(lst=clickedList):
-        FailedCanvas(chimpCanvas=chimpcanvas)
+        mistakes = mistakes + 1
+        failedChimp(chimpCanvas=chimpcanvas)
         return
 
 
@@ -106,18 +114,19 @@ def create_buttons():
     for i in range(len(mainMenu)):
         if mainMenu[i] is not None:
             mainMenu[i].destroy()
-    for i in range(len(gameplayMenus)):
-        if gameplayMenus[i] is not None:
-            gameplayMenus[i].destroy()
+    print('test')
     chimpCanvas = ctk.CTkCanvas(root, width=640, height=360)
     chimpCanvas.pack()
+    print('test2')
     gameplayMenus.append(chimpCanvas)
-
+    print('test3')
     for numb in range(level + 3):
         numb1 = numb + 1
         buttn_list.append(None)
+        print('test4')
         buttn_list[numb] = ctk.CTkButton(chimpCanvas, text=str(
             numb1), width=50, height=50, text_color='white', bg_color='white', hover_color='black', fg_color='black', font=("arial", 22), command=lambda num=numb1: AddToList(buttonNumb=num, chimpcanvas=chimpCanvas))
+        print('test5')
         x_coord, y_coord = generate_random_position(buttn_list[numb])
         buttn_list[numb].place(x=x_coord, y=y_coord)
         button_positions.append(
@@ -170,7 +179,37 @@ def EnterChimpTest():
 #    root.after(2000, f)
 
 
-def FailedCanvas(chimpCanvas):
+def failedChimp(chimpCanvas):
+    global mistakes
+    if mistakes == 3:
+        GameOverChimp(chimpCanvas)
+        mistakes = 0
+        return
+    else:
+        level = data['CHIMP_TEST_LEVEL']
+        clickedList.clear()
+        chimpCanvas.destroy()
+        canvas = ctk.CTkCanvas(root, width=640, height=360)
+        canvas.pack()
+        mainMenu.append(canvas)
+        nmbLabel = ctk.CTkLabel(canvas, text="NUMBERS",
+                                fg_color="transparent", font=('arial', 20), text_color='black', bg_color='white')
+        nmbLabel.place(relx=0.5, rely=0.25, anchor="center")
+        levelLabel = ctk.CTkLabel(canvas, text=str(int(level)+3),
+                                  fg_color="transparent", font=('arial', 40), text_color='black', bg_color='white')
+        levelLabel.place(relx=0.5, rely=0.4, anchor="center")
+        strikesLabel = ctk.CTkLabel(canvas, text="STRIKES",
+                                    fg_color="transparent", font=('arial', 20), text_color='black', bg_color='white')
+        strikesLabel.place(relx=0.5, rely=0.55, anchor="center")
+        strikes = ctk.CTkLabel(canvas, text=(str(mistakes) + ' of 3'),
+                               fg_color="transparent", font=('arial', 40), text_color='black', bg_color='white')
+        strikes.place(relx=0.5, rely=0.7, anchor="center")
+        playAgain = ctk.CTkButton(canvas, text="Continue",
+                                  width=100, height=50, command=create_buttons)
+        playAgain.place(relx=0.5, rely=0.9, anchor="center")
+
+
+def GameOverChimp(chimpCanvas):
     level = data['CHIMP_TEST_LEVEL']
     resetLevel()
     clickedList.clear()
@@ -183,7 +222,7 @@ def FailedCanvas(chimpCanvas):
     pwlabel.place(x=190, y=100)
     Level = ctk.CTkLabel(failcanvas, text=('Level : %d' % level),
                          fg_color="transparent", font=('arial', 20), text_color='black', bg_color='white')
-    Level.place(x=280, y=300)
+    Level.place(x=280, y=160)
     playAgain = ctk.CTkButton(failcanvas, text="Play Again ?",
                               width=100, height=50, command=create_buttons)
     playAgain.place(x=200, y=200)
