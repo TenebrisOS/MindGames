@@ -12,8 +12,7 @@ with open('allData/json/data.json') as f:
 # region vars
 mistakes = 0
 buttn_list = []
-mainMenu = []
-gameplayMenus = []
+
 level = data['CHIMP_TEST_LEVEL']
 clickedList = []
 button_positions = []
@@ -21,13 +20,14 @@ dataPath = 'allData/json/data.json'
 # endregion
 
 
-def resetLevel():
+def resetLevelChimp():
     data["CHIMP_TEST_LEVEL"] = 1
     with open(dataPath, "w") as jsonFile:
         json.dump(data, jsonFile)
 
 
 def AddToList(buttonNumb, chimpcanvas):
+    from main import gameplayMenus
     def play_audio(file_path):
         playsound(file_path)
     audio_thread = threading.Thread(target=play_audio, args=(
@@ -113,6 +113,7 @@ def intersect(bbox1, bbox2):
 
 
 def create_buttons():
+    from main import mainMenu, gameplayMenus
     from main import root, ctk
     level = data['CHIMP_TEST_LEVEL']
     for i in range(len(mainMenu)):
@@ -155,6 +156,7 @@ def failedChimp(chimpCanvas):
         mistakes = 0
         return
     else:
+        from main import mainMenu, gameplayMenus
         level = data['CHIMP_TEST_LEVEL']
         clickedList.clear()
         chimpCanvas.destroy()
@@ -179,9 +181,9 @@ def failedChimp(chimpCanvas):
 
 
 def GameOverChimp(chimpCanvas):
-    from main import root, ctk
+    from main import root, ctk, menu, mainMenu, resetLevelChimp
     level = data['CHIMP_TEST_LEVEL']
-    resetLevel()
+    resetLevelChimp()
     clickedList.clear()
     chimpCanvas.destroy()
     failcanvas = ctk.CTkCanvas(root, width=640, height=360)
@@ -202,7 +204,7 @@ def GameOverChimp(chimpCanvas):
 
 
 def ChimpMenu():
-    from main import root, ctk
+    from main import mainMenu, root, ctk
     for i in range(len(mainMenu)):
         if mainMenu[i] is not None:
             mainMenu[i].destroy()
@@ -222,22 +224,3 @@ def ChimpMenu():
                               width=80, height=40, command=EnterChimpTest)
     ChimpTest.place(x=280, y=200)
 
-
-def menu():
-    from main import root, ctk
-    resetLevel()
-    for i in range(len(mainMenu)):
-        if mainMenu[i] is not None:
-            mainMenu[i].destroy()
-    canvasMenu = ctk.CTkCanvas(root, width=640, height=360)
-    canvasMenu.pack()
-    mainMenu.append(canvasMenu)
-    # cap = cv2.VideoCapture('bg.mp4')
-    ChimpTest = ctk.CTkButton(canvasMenu, text="ChimpTest",
-                              width=100, height=40, command=ChimpMenu)
-    ChimpTest.place(x=100, y=100)
-    ChimpTest.lift()
-
-
-# region starting functions
-# endregion
