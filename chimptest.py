@@ -37,7 +37,6 @@ def resetLevelChimp():
 
 
 def AddToList(buttonNumb, chimpcanvas, root, menu, mainMenu, gameplayMenus):
-    
     audio_thread = threading.Thread(target=play_audio, args=(
         'allData/assets/SoundEffects/click.wav',))
     audio_thread.start()
@@ -50,7 +49,6 @@ def AddToList(buttonNumb, chimpcanvas, root, menu, mainMenu, gameplayMenus):
         #    if gameplayMenus[i] is not None:
         #        gameplayMenus[i].destroy()
         clickedList.clear()
-        # clickedList.append(buttonNumb)
         level = data['CHIMP_TEST_LEVEL']
         data["CHIMP_TEST_LEVEL"] = level + 1
         with open(dataPath, "w") as jsonFile:
@@ -117,12 +115,6 @@ def intersect(bbox1, bbox2):
 
 def create_buttons(root, mainMenu, gameplayMenus, menu):
     level = data['CHIMP_TEST_LEVEL']
-    for i in range(len(mainMenu)):
-        if mainMenu[i] is not None:
-            mainMenu[i].destroy()
-    chimpCanvas = ctk.CTkCanvas(root, width=640, height=360)
-    chimpCanvas.pack()
-    gameplayMenus.append(chimpCanvas)
     for numb in range(level + 3):
         numb1 = numb + 1
         buttn_list.append(None)
@@ -136,11 +128,17 @@ def create_buttons(root, mainMenu, gameplayMenus, menu):
 
 
 def EnterChimpTest(root, mainMenu, gameplayMenus, menu):
+    global chimpCanvas
+    for i in range(len(mainMenu)):
+        if mainMenu[i] is not None:
+            mainMenu[i].destroy()
+    chimpCanvas = ctk.CTkCanvas(root, width=640, height=360)
+    chimpCanvas.pack()
     create_buttons(root, mainMenu, gameplayMenus, menu)
 
-    for i in buttn_list:
-        pass
-        # print('Test: ' + i.__repr__())
+    #for i in buttn_list:
+    #    pass
+    #    # print('Test: ' + i.__repr__())
 
 
 def failedChimp(chimpCanvas, root, mainMenu, menu, gameplayMenus):
@@ -169,7 +167,7 @@ def failedChimp(chimpCanvas, root, mainMenu, menu, gameplayMenus):
                                fg_color="transparent", font=('arial', 40), text_color='black', bg_color='white')
         strikes.place(relx=0.5, rely=0.7, anchor="center")
         playAgain = ctk.CTkButton(canvas, text="Continue",
-                                  width=100, height=50, command=lambda :create_buttons(root, mainMenu, gameplayMenus, menu))
+                                  width=100, height=50, command=lambda : EnterChimpTest(root, mainMenu, gameplayMenus, menu))
         playAgain.place(relx=0.5, rely=0.9, anchor="center")
 
 
@@ -188,7 +186,7 @@ def GameOverChimp(chimpCanvas, root, mainMenu, menu, gameplayMenus):
                          fg_color="transparent", font=('arial', 20), text_color='black', bg_color='white')
     Level.place(x=280, y=160)
     playAgain = ctk.CTkButton(failcanvas, text="Play Again ?",
-                              width=100, height=50, command=lambda: create_buttons(root, mainMenu, gameplayMenus, menu))
+                              width=100, height=50, command=lambda: EnterChimpTest(root, mainMenu, gameplayMenus, menu))
 
 
     playAgain.place(x=200, y=200)
