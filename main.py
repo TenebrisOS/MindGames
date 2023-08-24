@@ -1,6 +1,6 @@
 import customtkinter as ctk
 from chimptest import ChimpMenu, resetLevelChimp
-
+from perfectpitch import pitchMenu
 
 # region tkinter settings
 mainMenu = []
@@ -17,7 +17,9 @@ root.title("Mind Games")
 
 def main():
     menu()
+    resetLevelChimp()
     root.mainloop()
+
 
 def menu():
     for i in range(len(mainMenu)):
@@ -31,13 +33,16 @@ def menu():
         canvasMenu.destroy()
         if is_chimp_test:
             ChimpMenu(root, mainMenu, gameplayMenus, menu)
-            print('chimp')
+            print('Chimp Test!')
+        else:
+            pitchMenu(mainMenu, root)
+            print('Perfect Pitch Test!')
         # if bool is False:
         #     pitchMenu()
 
     # cap = cv2.VideoCapture('bg.mp4')
     label1 = ctk.CTkLabel(canvasMenu, text='Chimpanzee test',
-                          fg_color="transparent", font=('arial', 20), text_color='black', bg_color='white')
+                          fg_color="transparent", font=('arial', 20), text_color='black')
     label1.place(x=100, y=120)
     ChimpTest = ctk.CTkButton(canvasMenu, text="Test",
                               width=100, height=40)
@@ -46,7 +51,7 @@ def menu():
     ChimpTest.bind("<Button-1>", lambda event: buttonAction(True))
 
     label2 = ctk.CTkLabel(canvasMenu, text='Perfect Pitch Quiz',
-                          fg_color="transparent", font=('arial', 20), text_color='black', bg_color='white')
+                          fg_color="transparent", font=('arial', 20), text_color='black')
     label2.place(x=360, y=120)
     perfectPitch = ctk.CTkButton(canvasMenu, text="Quiz",
                                  width=100, height=40)
@@ -55,7 +60,5 @@ def menu():
     perfectPitch.bind("<Button-1>", lambda event: buttonAction(False))
 
 
-
 if __name__ == "__main__":
     main()
-    resetLevelChimp()
