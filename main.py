@@ -22,9 +22,9 @@ def main():
 
 
 def menu():
-    for i in range(len(mainMenu)):
-        if mainMenu[i] is not None:
-            mainMenu[i].destroy()
+    for canvas in mainMenu:
+        if canvas is not None:
+            canvas.destroy()
     canvasMenu = ctk.CTkCanvas(root, width=640, height=360)
     canvasMenu.pack()
     mainMenu.append(canvasMenu)
