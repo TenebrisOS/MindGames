@@ -6,7 +6,7 @@ import threading
 from playsound import playsound
 # endregion
 
-with open('allData/json/data.json') as f:
+with open('allData/json/data.json', 'r') as f:
     data = json.load(f)
 
 # region vars

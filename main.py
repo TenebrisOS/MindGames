@@ -14,7 +14,6 @@ root.maxsize(640, 360)
 root.title("Mind Games")
 # endregion
 
-
 def main():
     menu()
     resetLevelChimp()
@@ -25,6 +24,7 @@ def menu():
     for canvas in mainMenu:
         if canvas is not None:
             canvas.destroy()
+            print('destoyed :', canvas)
     canvasMenu = ctk.CTkCanvas(root, width=640, height=360)
     canvasMenu.pack()
     mainMenu.append(canvasMenu)
@@ -35,7 +35,7 @@ def menu():
             ChimpMenu(root, mainMenu, gameplayMenus, menu)
             print('Chimp Test!')
         else:
-            pitchMenu(mainMenu, root)
+            pitchMenu(mainMenu, root, gameplayMenus, menu)
             print('Perfect Pitch Test!')
         # if bool is False:
         #     pitchMenu()
