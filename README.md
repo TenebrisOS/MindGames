@@ -5,3 +5,4 @@ These are games inspired by [Human Benchmark](https://humanbenchmark.com/tests/)
 - Working on perfect pitch
 ## Credits 
 This project was created by [TenebrisOS](https://github.com/TenebrisOS)
+Pitches are taken from [piano-mp3](https://github.com/fuhton/piano-mp3)
