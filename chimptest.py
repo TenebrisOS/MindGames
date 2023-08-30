@@ -201,7 +201,6 @@ def GameOverChimp(chimpCanvas, root, mainMenu, menu, gameplayMenus):
 
 
 def ChimpMenu(root, mainMenu, gameplayMenus, menu):
-
     # menus_to_destroy = mainMenu.copy()
     for i in range(len(mainMenu)):
         if mainMenu[i] is not None:
@@ -223,3 +222,15 @@ def ChimpMenu(root, mainMenu, gameplayMenus, menu):
     ChimpTest = ctk.CTkButton(chimpmainmenu, text="Start Test",
                               width=80, height=40, command=lambda: EnterChimpTest(root, mainMenu, gameplayMenus, menu))
     ChimpTest.place(x=280, y=200)
+    returnbutton = ctk.CTkButton(root, text="🏠",
+                                 width=40, height=40, command=lambda: GetBackToMenu(gameplayMenus, menu), bg_color='white')
+    returnbutton.place(x=30, y=300)
+    returnbutton.lift()
+
+
+def GetBackToMenu(gameplaycanvas, mainmenucanvas):
+    for gameplay in gameplaycanvas:
+        if gameplay is not None:
+            gameplay.destroy()
+            print('destoyed :', gameplay)
+    mainmenucanvas()
