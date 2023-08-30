@@ -105,36 +105,29 @@ def Pitch(mainMenu, canvas, pitchcanvas, btnlist, nbrquestion, completedQst, pro
     title = ctk.CTkLabel(canvas, text="Perfect Pitch Test",
                          fg_color="transparent", font=('arial', 30), text_color='black', anchor=ctk.CENTER)
     title.place(relx=0.5, rely=0.15, anchor="center")
-    buttonPosition = 0.5
+    buttonPosition = 0
     boolvalue = True
     btnpitchlist = []
     print(selectedmode)
-    for pitchbutton in range(len(selectedmode)):
-        if len(selectedmode) == 3:
-            if boolvalue == True:
-                boolvalue = False
-                buttonPosition +=0.1
-            else:
-                boolvalue = False
-                buttonPosition +=0.1
-        else:
-            if boolvalue == True:
-                boolvalue = False
-                if pitchbutton == selectedmode[2]:
-                    buttonPosition +=0.2
-                else:
-                    buttonPosition += 0.1
-            else:
-                boolvalue = False
-                if pitchbutton == selectedmode[2]:
-                    buttonPosition +=0.2
-                else:
-                    buttonPosition =0.1
-        btnpitchlist.append(None)
-        btnpitchlist[pitchbutton] = ctk.CTkButton(canvas, text=selectedmode[pitchbutton],
-                         width=60, height=60, font=('arial', 20), command=lambda num=selectedmode[pitchbutton], num2=pitchbutton: CheckAnswer(num, randomLetter, canvas, mainMenu, pitchcanvas, btnlist, progressbar, completedQst, nbrquestion, gameplaycanvas, playSoundBtn, mainmenucanvas, selectedmode, btnpitchlist, num2))
-        btnpitchlist[pitchbutton].place(relx=(buttonPosition), rely=0.5, anchor="center")
-        btnlist.append(btnpitchlist[pitchbutton])
+    if len(selectedmode) == 3:
+        buttonPosition = 0.3
+        for pitchbutton in range(len(selectedmode)):
+            buttonPosition+=0.1
+            btnpitchlist.append(None)
+            create_buttons(pitchbutton, btnpitchlist, btnlist, randomLetter, canvas, mainMenu, pitchcanvas, progressbar, completedQst, nbrquestion, gameplaycanvas, playSoundBtn, mainmenucanvas, selectedmode, buttonPosition)
+    if len(selectedmode) == 7:
+        buttonPosition = 0.1
+        for pitchbutton in range(len(selectedmode)):
+            buttonPosition+=0.1
+            btnpitchlist.append(None)
+            create_buttons(pitchbutton, btnpitchlist, btnlist, randomLetter, canvas, mainMenu, pitchcanvas, progressbar, completedQst, nbrquestion, gameplaycanvas, playSoundBtn, mainmenucanvas, selectedmode, buttonPosition)
+
+def create_buttons(pitchbutton, btnpitchlist, btnlist, randomLetter, canvas, mainMenu, pitchcanvas, progressbar, completedQst, nbrquestion, gameplaycanvas, playSoundBtn, mainmenucanvas, selectedmode, buttonPosition):
+    btnpitchlist[pitchbutton] = ctk.CTkButton(canvas, text=selectedmode[pitchbutton],
+                             width=60, height=60, font=('arial', 20), command=lambda num=selectedmode[pitchbutton], num2=pitchbutton: CheckAnswer(num, randomLetter, canvas, mainMenu, pitchcanvas, btnlist, progressbar, completedQst, nbrquestion, gameplaycanvas, playSoundBtn, mainmenucanvas, selectedmode, btnpitchlist, num2))
+    btnpitchlist[pitchbutton].place(relx=(buttonPosition), rely=0.5, anchor="center")
+    btnlist.append(btnpitchlist[pitchbutton])
+
 
 
 def GetBackToMenu(gameplaycanvas, mainmenucanvas):

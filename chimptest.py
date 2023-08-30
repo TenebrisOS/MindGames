@@ -175,6 +175,10 @@ def failedChimp(chimpCanvas, root, mainMenu, menu, gameplayMenus):
 
 def GameOverChimp(chimpCanvas, root, mainMenu, menu, gameplayMenus):
     level = data['CHIMP_TEST_LEVEL']
+    if data["HIGH_SCORE_CHIMP"] < level:
+        data["HIGH_SCORE_CHIMP"] = level
+        with open(dataPath, "w") as jsonFile:
+            json.dump(data, jsonFile)
     resetLevelChimp()
     clickedList.clear()
     chimpCanvas.destroy()

@@ -1,6 +1,7 @@
 import customtkinter as ctk
 from chimptest import ChimpMenu, resetLevelChimp
 from perfectpitch import pitchMenu
+import json
 
 # region tkinter settings
 mainMenu = []
@@ -47,6 +48,12 @@ def menu():
     ChimpTest = ctk.CTkButton(canvasMenu, text="Test",
                               width=100, height=40)
     ChimpTest.place(x=120, y=150)
+    with open('allData/json/data.json', 'r') as f:
+        data = json.load(f)
+    highscore = data["HIGH_SCORE_CHIMP"]
+    label3 = ctk.CTkLabel(canvasMenu, text=('Highest Score : '+ str(highscore)),
+                          fg_color="transparent", font=('arial', 20), text_color='black')
+    label3.place(x=100, y=200)
     ChimpTest.lift()
     ChimpTest.bind("<Button-1>", lambda event: buttonAction(True))
 
@@ -57,9 +64,9 @@ def menu():
                                  width=100, height=40)
     perfectPitch.place(x=380, y=150)
     perfectPitch.lift()
-    label3 = ctk.CTkLabel(canvasMenu, text='(not working yet)',
+    label3 = ctk.CTkLabel(canvasMenu, text='(experimental)',
                           fg_color="transparent", font=('arial', 20), text_color='black')
-    label3.place(x=360, y=200)
+    label3.place(x=370, y=200)
     perfectPitch.bind("<Button-1>", lambda event: buttonAction(False))
 
 
