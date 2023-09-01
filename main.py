@@ -64,9 +64,9 @@ def menu():
                                  width=100, height=40)
     perfectPitch.place(x=380, y=150)
     perfectPitch.lift()
-    label3 = ctk.CTkLabel(canvasMenu, text='(experimental)',
-                          fg_color="transparent", font=('arial', 20), text_color='black')
-    label3.place(x=370, y=200)
+    #label3 = ctk.CTkLabel(canvasMenu, text='(experimental)',
+    #                      fg_color="transparent", font=('arial', 20), text_color='black')
+    #label3.place(x=370, y=200)
     perfectPitch.bind("<Button-1>", lambda event: buttonAction(False))
 
 
