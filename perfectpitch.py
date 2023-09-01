@@ -14,9 +14,7 @@ def play_audio(file_path):
     playsound(file_path)
 
 
-def update_progress(progressbar, completedQst, nbrquestion):
-    # if nbrquestion != 0
-    #    mlt = 100 / nbrquestion
+def update_progress(progressbar, completedQst):
     nbr = completedQst / 10
     if completedQst != 0:
         if progressbar is not None:
@@ -27,32 +25,35 @@ def DisableButton(btn):
     btn.configure(state='disabled')
 
 
-def CheckAnswer(choice, sound, canvas, mainMenu, pitchcanvas, btnlist, progressbar, completedQst, nbrquestion, gameplaycanvas, playSoundBtn, mainmenucanvas, selectedmode, btnpitchlist, number):
-    print(choice)
-    print(number)
+def CheckAnswer(choice, sound, canvas, mainMenu, pitchcanvas, btnlist, progressbar, completedQst, nbrquestion, gameplaycanvas, playSoundBtn, mainmenucanvas, selectedmode, btnpitchlist, number, checkbox, root):
     if choice == sound:
         btnpitchlist[number].configure(fg_color='green', hover=False)
-        NextPitch(canvas, mainMenu, pitchcanvas, btnlist,
-                  progressbar, completedQst, nbrquestion, gameplaycanvas, playSoundBtn, mainmenucanvas, selectedmode)
+        root.after(700, lambda: checkthebox(completedQst))
+        def checkthebox(completedQst):
+            if checkbox.get() == False:
+                NextPitch(canvas, mainMenu, pitchcanvas, btnlist,
+                          progressbar, completedQst, nbrquestion, gameplaycanvas, playSoundBtn, mainmenucanvas, selectedmode, checkbox, root)
+            else:
+                completedQst += 1
+                Next(mainMenu, canvas, pitchcanvas,
+                        btnlist, nbrquestion, None, completedQst, progressbar, gameplaycanvas, mainmenucanvas, selectedmode, checkbox, root)
+                update_progress(progressbar, completedQst)
         for btn in btnlist:
             if btn is not None:
                 DisableButton(btn)
-            else:
-                print('button is none', btn)
     else:
         btnpitchlist[number].configure(fg_color='red', hover=False)
 
 
-def NextPitch(canvas, mainMenu, pitchcanvas, btnlist, progressbar, completedQst, nbrquestion, gameplaycanvas, playSoundBtn, mainmenucanvas, selectedmode):
+def NextPitch(canvas, mainMenu, pitchcanvas, btnlist, progressbar, completedQst, nbrquestion, gameplaycanvas, playSoundBtn, mainmenucanvas, selectedmode, checkbox, root):
     completedQst = completedQst + 1
-    print(completedQst)
     playSoundBtn.place(relx=0.4, rely=0.3, anchor="center")
     nextButton = ctk.CTkButton(canvas, text="Next",
                                width=80, height=40, font=('arial', 15), fg_color='black', text_color='white')
     nextButton.bind("<Button-1>", lambda event: Next(mainMenu, canvas, pitchcanvas,
-                    btnlist, nbrquestion, nextButton, completedQst, progressbar, gameplaycanvas, mainmenucanvas, selectedmode))
+                    btnlist, nbrquestion, nextButton, completedQst, progressbar, gameplaycanvas, mainmenucanvas, selectedmode, checkbox, root))
     nextButton.place(relx=0.6, rely=0.3, anchor="center")
-    update_progress(progressbar, completedQst, nbrquestion)
+    update_progress(progressbar, completedQst)
 
 
 def RandomizePitch(mode):
@@ -64,7 +65,6 @@ def RandomizePitch(mode):
             filtered_list.append(pitch)
     file = random.choice(filtered_list)
     
-    print(file)
     return file
 
 def DestroyButtons(btnlist):
@@ -73,20 +73,21 @@ def DestroyButtons(btnlist):
             btn.destroy()
 
 
-def Next(mainMenu, canvas, pitchcanvas, btnlist, nbrquestion, button, completedQst, progressbar, gameplaycanvas, mainmenucanvas, selectedmode):
-    print('test6')
-    button.destroy()
-    print('test7')
+def Next(mainMenu, canvas, pitchcanvas, btnlist, nbrquestion, button, completedQst, progressbar, gameplaycanvas, mainmenucanvas, selectedmode, checkbox, root):
+    if button is not None:
+        button.destroy()
     Pitch(mainMenu, canvas, pitchcanvas, btnlist,
-          nbrquestion, completedQst, progressbar, gameplaycanvas, mainmenucanvas, selectedmode)
-    print('test8')
+          nbrquestion, completedQst, progressbar, gameplaycanvas, mainmenucanvas, selectedmode, checkbox, root)
 
 
 
-def Pitch(mainMenu, canvas, pitchcanvas, btnlist, nbrquestion, completedQst, progressbar, gameplaycanvas, mainmenucanvas, selectedmode):
-    if completedQst == nbrquestion:
+def Pitch(mainMenu, canvas, pitchcanvas, btnlist, nbrquestion, completedQst, progressbar, gameplaycanvas, mainmenucanvas, selectedmode, checkbox, root):
+    if nbrquestion == 0:
+        pass
+    elif completedQst == nbrquestion:
         GetBackToMenu(gameplaycanvas, mainmenucanvas)
         return
+    
 
     randomPitch = RandomizePitch(selectedmode)
     randomLetter = randomPitch[0]
@@ -111,20 +112,16 @@ def Pitch(mainMenu, canvas, pitchcanvas, btnlist, nbrquestion, completedQst, pro
     print(selectedmode)
     if len(selectedmode) == 3:
         buttonPosition = 0.3
-        for pitchbutton in range(len(selectedmode)):
-            buttonPosition+=0.1
-            btnpitchlist.append(None)
-            create_buttons(pitchbutton, btnpitchlist, btnlist, randomLetter, canvas, mainMenu, pitchcanvas, progressbar, completedQst, nbrquestion, gameplaycanvas, playSoundBtn, mainmenucanvas, selectedmode, buttonPosition)
     if len(selectedmode) == 7:
         buttonPosition = 0.1
-        for pitchbutton in range(len(selectedmode)):
-            buttonPosition+=0.1
-            btnpitchlist.append(None)
-            create_buttons(pitchbutton, btnpitchlist, btnlist, randomLetter, canvas, mainMenu, pitchcanvas, progressbar, completedQst, nbrquestion, gameplaycanvas, playSoundBtn, mainmenucanvas, selectedmode, buttonPosition)
+    for pitchbutton in range(len(selectedmode)):
+        buttonPosition+=0.1
+        btnpitchlist.append(None)
+        create_buttons(pitchbutton, btnpitchlist, btnlist, randomLetter, canvas, mainMenu, pitchcanvas, progressbar, completedQst, nbrquestion, gameplaycanvas, playSoundBtn, mainmenucanvas, selectedmode, buttonPosition, checkbox, root)
 
-def create_buttons(pitchbutton, btnpitchlist, btnlist, randomLetter, canvas, mainMenu, pitchcanvas, progressbar, completedQst, nbrquestion, gameplaycanvas, playSoundBtn, mainmenucanvas, selectedmode, buttonPosition):
+def create_buttons(pitchbutton, btnpitchlist, btnlist, randomLetter, canvas, mainMenu, pitchcanvas, progressbar, completedQst, nbrquestion, gameplaycanvas, playSoundBtn, mainmenucanvas, selectedmode, buttonPosition, checkbox, root):
     btnpitchlist[pitchbutton] = ctk.CTkButton(canvas, text=selectedmode[pitchbutton],
-                             width=60, height=60, font=('arial', 20), command=lambda num=selectedmode[pitchbutton], num2=pitchbutton: CheckAnswer(num, randomLetter, canvas, mainMenu, pitchcanvas, btnlist, progressbar, completedQst, nbrquestion, gameplaycanvas, playSoundBtn, mainmenucanvas, selectedmode, btnpitchlist, num2))
+                             width=60, height=60, font=('arial', 20), command=lambda num=selectedmode[pitchbutton], num2=pitchbutton: CheckAnswer(num, randomLetter, canvas, mainMenu, pitchcanvas, btnlist, progressbar, completedQst, nbrquestion, gameplaycanvas, playSoundBtn, mainmenucanvas, selectedmode, btnpitchlist, num2, checkbox, root))
     btnpitchlist[pitchbutton].place(relx=(buttonPosition), rely=0.5, anchor="center")
     btnlist.append(btnpitchlist[pitchbutton])
 
@@ -138,7 +135,7 @@ def GetBackToMenu(gameplaycanvas, mainmenucanvas):
     mainmenucanvas()
 
 
-def EnterPitchTest(mainMenu, root, pitchcanvas, questionEntry, gameplaycanvas, mainmenucanvas, optionmenu):
+def EnterPitchTest(mainMenu, root, pitchcanvas, questionEntry, gameplaycanvas, mainmenucanvas, optionmenu, checkbox):
     selectedmode=optionmenu.get()
     if selectedmode == 'Simple (C, D, E)':
         mode = ['C', 'D', 'E']
@@ -166,7 +163,7 @@ def EnterPitchTest(mainMenu, root, pitchcanvas, questionEntry, gameplaycanvas, m
     returnbutton.place(x=30, y=300)
     returnbutton.lift()
     Pitch(mainMenu, gameCanvas, pitchcanvas, btnlist,
-          nbrquestion, completedQst, progressbar, gameplaycanvas, mainmenucanvas, mode)
+          nbrquestion, completedQst, progressbar, gameplaycanvas, mainmenucanvas, mode, checkbox, root)
 
 
 def pitchMenu(mainMenu, root, gameplaycanvas, mainmenucanvas):
@@ -204,20 +201,24 @@ def pitchMenu(mainMenu, root, gameplaycanvas, mainmenucanvas):
 
     nbrquestion = None
     questionEntry = ctk.CTkSlider(
-        pitchcanvas, from_=0, to=20, command=slider_event)
+        pitchcanvas, from_=0, to=40, command=slider_event, bg_color='white', fg_color='grey', progress_color='black')
     questionEntry.place(relx=0.5, rely=0.72, anchor="center")
     questionEntry.set(0)
     questions = ctk.CTkLabel(pitchcanvas, text="Questions :",
                              fg_color="transparent", font=('arial', 20), text_color='black')
     questions.place(x=115, y=243)
     label2 = ctk.CTkLabel(pitchcanvas, text="Leave as 0 for never-ending quiz.",
-                          font=('', 15), text_color='black')
+                          font=('arial', 15), text_color='black')
     label2.place(x=110, y=270)
 
     valueCTK = ctk.CTkLabel(pitchcanvas, text='',
                             fg_color="transparent", font=('arial', 20), text_color='black')
     valueCTK.place(x=450, y=243)
+    checkbox = ctk.CTkCheckBox(pitchcanvas, text="Auto Proceed",
+                                onvalue=True, offvalue=False, font=('arial', 18), text_color='black')
+    checkbox.place(x=445, y=210)
     prfcPitch = ctk.CTkButton(pitchcanvas, text="Start Quiz",
-                              width=80, height=40, command=lambda: EnterPitchTest(mainMenu, root, pitchcanvas, questionEntry, gameplaycanvas, mainmenucanvas, optionmenu))
+                              width=80, height=40, command=lambda: EnterPitchTest(mainMenu, root, pitchcanvas, questionEntry, gameplaycanvas, mainmenucanvas, optionmenu, checkbox))
     prfcPitch.place(x=280, y=300)
+    
     print(questionEntry.get())
