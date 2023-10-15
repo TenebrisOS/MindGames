@@ -135,7 +135,7 @@ def GetBackToMenu(gameplaycanvas, mainmenucanvas):
     mainmenucanvas()
 
 
-def EnterPitchTest(mainMenu, root, pitchcanvas, questionEntry, gameplaycanvas, mainmenucanvas, optionmenu, checkbox):
+def EnterPitchTest(mainMenu, root, pitchcanvas, questionEntry, gameplaycanvas, mainmenucanvas, optionmenu, checkbox, screen_width, screen_height):
     selectedmode=optionmenu.get()
     if selectedmode == 'Simple (C, D, E)':
         mode = ['C', 'D', 'E']
@@ -145,7 +145,7 @@ def EnterPitchTest(mainMenu, root, pitchcanvas, questionEntry, gameplaycanvas, m
     nbrquestion = int(questionEntry.get())
     print(nbrquestion)
     btnlist = []
-    gameCanvas = ctk.CTkCanvas(root, width=640, height=360)
+    gameCanvas = ctk.CTkCanvas(root, width=screen_width, height=screen_height)
     gameCanvas.pack()
     gameplaycanvas.append(gameCanvas)
     if nbrquestion != 0:
@@ -166,12 +166,12 @@ def EnterPitchTest(mainMenu, root, pitchcanvas, questionEntry, gameplaycanvas, m
           nbrquestion, completedQst, progressbar, gameplaycanvas, mainmenucanvas, mode, checkbox, root)
 
 
-def pitchMenu(mainMenu, root, gameplaycanvas, mainmenucanvas):
+def pitchMenu(mainMenu, root, gameplaycanvas, mainmenucanvas, screen_width, screen_height):
     for maincanvas in mainMenu:
         if maincanvas is not None:
             maincanvas.destroy()
             print('destoyed :', maincanvas)
-    pitchcanvas = ctk.CTkCanvas(root, width=640, height=360)
+    pitchcanvas = ctk.CTkCanvas(root, width=screen_width, height=screen_height)
     pitchcanvas.pack()
     mainMenu.append(pitchcanvas)
     title = ctk.CTkLabel(pitchcanvas, text="Perfect Pitch Quiz",
@@ -218,7 +218,7 @@ def pitchMenu(mainMenu, root, gameplaycanvas, mainmenucanvas):
                                 onvalue=True, offvalue=False, font=('arial', 18), text_color='black')
     checkbox.place(x=445, y=210)
     prfcPitch = ctk.CTkButton(pitchcanvas, text="Start Quiz",
-                              width=80, height=40, command=lambda: EnterPitchTest(mainMenu, root, pitchcanvas, questionEntry, gameplaycanvas, mainmenucanvas, optionmenu, checkbox))
+                              width=80, height=40, command=lambda: EnterPitchTest(mainMenu, root, pitchcanvas, questionEntry, gameplaycanvas, mainmenucanvas, optionmenu, checkbox, screen_width, screen_height))
     prfcPitch.place(x=280, y=300)
     
     print(questionEntry.get())
