@@ -35,6 +35,7 @@ def resetLevelChimp():
     print('level : ', str(data["CHIMP_TEST_LEVEL"]))
     print('level reset!')
 
+
 def main():
     resetLevelChimp()
     menu()
@@ -54,18 +55,18 @@ def menu():
         canvasMenu.destroy()
         if is_chimp_test:
             if toggleOnline.get() == True:
-                
+
                 if username != '' or " ":
                     ChimpMenu(root, mainMenu, gameplayMenus, menu,
                               screen_width, screen_height, username, toggleOnline.get())
                 else:
                     label563651 = ctk.CTkLabel(canvasMenu, text=('Pls enter a correct username!'),
-                                    fg_color="transparent", font=('arial', 10), text_color='red')
+                                               fg_color="transparent", font=('arial', 10), text_color='red')
                     label563651.place(x=100, y=100)
                     noteslist.append(label563651)
             else:
                 ChimpMenu(root, mainMenu, gameplayMenus, menu,
-                              screen_width, screen_height, None, toggleOnline.get())
+                          screen_width, screen_height, None, toggleOnline.get())
             print('Chimp Test!')
         else:
             pitchMenu(mainMenu, root, gameplayMenus,
@@ -108,26 +109,26 @@ def Login(event, entry, canvas):
             element.destroy()
     global username
     username = entry.get()
-    
+
     print(username)
     from client import requestUrl
     response = requestUrl(mode='read', username=username)
     if response == 'server offline':
         label56 = ctk.CTkLabel(canvas, text=('Server error or offline :('),
-                            fg_color="transparent", font=('arial', 10), text_color='red')
+                               fg_color="transparent", font=('arial', 10), text_color='red')
         label56.place(x=180, y=90)
         noteslist.append(label56)
     elif response != 'user not registered':
         label3 = ctk.CTkLabel(canvas, text=('Highest Score : ' + str(response)),
-                            fg_color="transparent", font=('arial', 20), text_color='black')
+                              fg_color="transparent", font=('arial', 20), text_color='black')
         label3.place(x=100, y=200)
         label56987 = ctk.CTkLabel(canvas, text=('Logged In Successfully!'),
-                            fg_color="transparent", font=('arial', 10), text_color='green')
+                                  fg_color="transparent", font=('arial', 10), text_color='green')
         label56987.place(x=180, y=90)
         noteslist.append(label56987)
     else:
         label56 = ctk.CTkLabel(canvas, text=('User not Registered! Try register instead'),
-                            fg_color="transparent", font=('arial', 10), text_color='red')
+                               fg_color="transparent", font=('arial', 10), text_color='red')
         label56.place(x=180, y=90)
         noteslist.append(label56)
     entry.delete(0, ctk.END)
@@ -171,12 +172,12 @@ def Register(event, entry, canvas):
             element.destroy()
     text = entry.get()
     print(text)
-    
+
     response = requestUrl(mode='submit', username=text)
     print(response)
     if response == 'server offline':
         label56 = ctk.CTkLabel(canvas, text=('Server error or offline :('),
-                            fg_color="transparent", font=('arial', 10), text_color='red')
+                               fg_color="transparent", font=('arial', 10), text_color='red')
         label56.place(x=180, y=90)
     elif response == 'already exist':
         label563 = ctk.CTkLabel(canvas, text=('User Already Registered! Try login instead'),

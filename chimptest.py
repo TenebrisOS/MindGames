@@ -58,17 +58,20 @@ def AddToList(buttonNumb, chimpcanvas, root, menu, mainMenu, gameplayMenus, scre
             if buttn_list[i] is not None:
                 buttn_list[i].destroy()
 
-        create_buttons(root, mainMenu, gameplayMenus, menu, screen_width, screen_height, user, online)
+        create_buttons(root, mainMenu, gameplayMenus, menu,
+                       screen_width, screen_height, user, online)
         return
     elif len(clickedList) == 1:
         hide_numbers()
         if clickedList[0] != 1:
             mistakes = mistakes + 1
-            failedChimp(chimpcanvas, root, mainMenu, menu, gameplayMenus, screen_width, screen_height, user, online)
+            failedChimp(chimpcanvas, root, mainMenu, menu,
+                        gameplayMenus, screen_width, screen_height, user, online)
             return
     elif not check_order(lst=clickedList):
         mistakes = mistakes + 1
-        failedChimp(chimpcanvas, root, mainMenu, menu, gameplayMenus, screen_width, screen_height, user, online)
+        failedChimp(chimpcanvas, root, mainMenu, menu, gameplayMenus,
+                    screen_width, screen_height, user, online)
         return
 
 
@@ -134,7 +137,8 @@ def EnterChimpTest(root, mainMenu, gameplayMenus, menu, screen_width, screen_hei
             mainMenu[i].destroy()
     chimpCanvas = ctk.CTkCanvas(root, width=screen_width, height=screen_height)
     chimpCanvas.pack()
-    create_buttons(root, mainMenu, gameplayMenus, menu, screen_width, screen_height, user, online)
+    create_buttons(root, mainMenu, gameplayMenus, menu,
+                   screen_width, screen_height, user, online)
 
     # for i in buttn_list:
     #    pass
@@ -164,7 +168,8 @@ def failedChimp(chimpCanvas, root, mainMenu, menu, gameplayMenus, screen_width, 
                 return
 
     if mistakes == 3:
-        GameOverChimp(chimpCanvas, root, mainMenu, menu, gameplayMenus, screen_width, screen_height, user, online)
+        GameOverChimp(chimpCanvas, root, mainMenu, menu,
+                      gameplayMenus, screen_width, screen_height, user, online)
         print('Game Over')
         mistakes = 0
         return
@@ -225,7 +230,8 @@ def ChimpMenu(root, mainMenu, gameplayMenus, menu, screen_width, screen_height, 
         if mainMenu[i] is not None:
             mainMenu[i].destroy()
             print('destoyed :', mainMenu[i])
-    chimpmainmenu = ctk.CTkCanvas(root, width=screen_width, height=screen_height)
+    chimpmainmenu = ctk.CTkCanvas(
+        root, width=screen_width, height=screen_height)
     chimpmainmenu.pack()
     mainMenu.append(chimpmainmenu)
 

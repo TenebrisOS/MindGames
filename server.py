@@ -4,6 +4,7 @@ import json
 app = Flask(__name__)
 dataPath = 'allData/ServerData/data.json'
 
+
 def GetUserHighScore(username):
     with open(dataPath) as f:
         data = json.load(f)
@@ -12,6 +13,7 @@ def GetUserHighScore(username):
         return str(data[username])
     else:
         return 'none'
+
 
 @app.route('/highscore/read', methods=['GET'])
 def give_data():
@@ -25,21 +27,23 @@ def give_data():
     response.status_code = 200
     return response
 
+
 @app.route('/highscore/submit', methods=['POST'])
 def submit_data():
     datareceived = request.get_json()
     username = list(datareceived.keys())[0]
     score = datareceived[username]
     print(username, score)
-    
-    statusdumping=dumpToJson(data=datareceived, username=username)
+
+    statusdumping = dumpToJson(data=datareceived, username=username)
     if statusdumping:
-        response=make_response('already exist')
+        response = make_response('already exist')
         return response
     else:
         response = make_response('success')
     response.status_code = 200
     return response
+
 
 @app.route('/highscore/update', methods=['POST'])
 def update_data():
@@ -48,7 +52,7 @@ def update_data():
     score = datareceived[username]
     print(username, score)
     print(datareceived)
-    
+
     if updateJson(datareceived, username) == True:
         response = make_response('True')
     else:
@@ -70,7 +74,8 @@ def updateJson(data, username):
         jsondata.update(data)
         # Write the updated JSON data back to the file
         with open(dataPath, 'w') as f:
-            json.dump(jsondata, f, indent=4)  # You can use 'indent' for formatting
+            # You can use 'indent' for formatting
+            json.dump(jsondata, f, indent=4)
         print("Data updated and saved to data.json")
         return True
 
@@ -94,10 +99,10 @@ def dumpToJson(data, username):
         jsondata.update(data)
         # Write the updated JSON data back to the file
         with open(dataPath, 'w') as f:
-            json.dump(jsondata, f, indent=4)  # You can use 'indent' for formatting
+            # You can use 'indent' for formatting
+            json.dump(jsondata, f, indent=4)
         print("Data updated and saved to data.json")
         return False
-
 
 
 if __name__ == '__main__':
