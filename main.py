@@ -55,8 +55,7 @@ def menu():
         canvasMenu.destroy()
         if is_chimp_test:
             if toggleOnline.get() == True:
-
-                if username != '' or " ":
+                if username != '' and " ":
                     ChimpMenu(root, mainMenu, gameplayMenus, menu,
                               screen_width, screen_height, username, toggleOnline.get())
                 else:
